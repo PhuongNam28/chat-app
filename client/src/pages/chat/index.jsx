@@ -1,11 +1,11 @@
-import { userAppStore } from "@/store";
+import { useNavigate } from "react-router-dom"; 
 import { useEffect } from "react";
-import { Navigate } from "react-router-dom";
 import { toast } from "sonner";
+import { userAppStore } from "@/store";
 
 const Chat = () => {
   const { userInfo } = userAppStore();
-  const navigate = Navigate;
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     if (!userInfo.profileSetup) {
@@ -13,7 +13,7 @@ const Chat = () => {
       navigate("/profile");
     }
   }, [userInfo, navigate]);
-  
+
   return <div>Chat</div>;
 };
 

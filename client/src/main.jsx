@@ -5,8 +5,10 @@ import './index.css'
 import { Toaster } from './components/ui/sonner.jsx'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-    <Toaster closeButton />
-  </React.StrictMode>,
+  // <React.StrictMode>
+    <>
+       <App />
+       <Toaster closeButton />
+    </>
+  // </React.StrictMode>,
 )
