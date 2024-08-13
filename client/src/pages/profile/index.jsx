@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { apiClient } from "@/lib/api-client";
+import { HOST, REMOVE_PROFILE_IMAGE_ROUTE } from '@/utils/constants'
 import {
   ADD_PROFILE_IMAGE_ROUTE,
   UPDATE_PROFILE_ROUTE,
@@ -16,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const navigate = useNavigate();
-  ``;
   const { userInfo, setUserInfo } = userAppStore();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -30,6 +30,10 @@ const Profile = () => {
       setFirstName(userInfo.firstName);
       setLastName(userInfo.lastName);
       setSelectedColor(userInfo.color);
+    }
+    if(userInfo.image)
+    {
+      setImage(`${HOST}/${userInfo.image}`)
     }
   }, [userInfo]);
 
@@ -76,6 +80,7 @@ const Profile = () => {
   };
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
+    console.log(file)
     if (file) {
       // setImage(URL.createObjectURL(file));
       const formData = new FormData();
@@ -91,8 +96,8 @@ const Profile = () => {
         );
         if (response.status === 200 && response.data.image) {
           setUserInfo({ ...userInfo, image: response.data.image });
-          toast.success("Profile updated successfully");
-          navigate("/chat");
+          toast.success("Image updated successfully");
+          // navigate("/chat");
         }
        
       } catch (error) {
@@ -101,7 +106,23 @@ const Profile = () => {
       }
     }
   };
-  const handleDeleteImage = async () => {};
+  const handleDeleteImage = async () => {
+    try {
+      const response = await apiClient.delete(
+        REMOVE_PROFILE_IMAGE_ROUTE,
+       { withCredentials: true,}
+      )
+      if(response.status===200)
+      {
+        setUserInfo({...userInfo, image: null });
+        toast.success("Image removed successfully");
+        setImage(null)
+        // navigate("/chat");
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  };
 
   return (
     <div className="bg-[#1b1c24] h-screen flex items-center justify-center gap-10 flex-col">
