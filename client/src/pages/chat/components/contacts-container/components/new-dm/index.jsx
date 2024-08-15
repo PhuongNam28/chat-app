@@ -27,13 +27,16 @@ const NewDM = () => {
   const {setSelectedChatType,setSelectedChatData} = userAppStore()
   const [openNewContactModal, setOpenNewContactModal] = useState(false);
   const [searchedContacts, setSearchedContacts] = useState([]);
-  const selectNewContact  = (contact)=>{
+
+  const selectNewContact = (contact) => {
+    console.log("Contact selected:", {contact});
     setOpenNewContactModal(false);
-    setSelectedChatType("contact"),
-    setSelectedChatData(contact),
-    setSearchedContacts([])
-    
-  }
+    setSelectedChatType("contact");
+    setSelectedChatData(contact);
+    setSearchedContacts([]);
+};
+
+
   const searchContacts = async (searchTerm) => {
     try {
       if (searchTerm.length > 0) {
@@ -83,6 +86,9 @@ const NewDM = () => {
               onChange={(e) => searchContacts(e.target.value)}
             ></Input>
           </div>
+          {
+            searchedContacts.length > 0 && 
+          
           <ScrollArea className="h-[250px]">
             <div className="flex flex-col gap-5">
               {searchedContacts.map((contact) => (
@@ -97,7 +103,7 @@ const NewDM = () => {
                         <AvatarImage
                           src={`${HOST}/${contact.image}`}
                           alt="profile"
-                          className="object-cover w-full h-full"
+                          className="object-cover w-full h-full rounded-full"
                         />
                       ) : (
                         <div
@@ -124,8 +130,9 @@ const NewDM = () => {
               ))}
             </div>
           </ScrollArea>
+          }
           {searchedContacts.length <= 0 && (
-            <div className="flex-1 mt-5 md:bg-[#1c1d25] md:flex flex-col justify-center items-center hidden duration-1000 transition-all">
+            <div className="flex-1 mt-5 md:mt-0 md:flex flex-col justify-center items-center hidden duration-1000 transition-all">
               <Lottie
                 isClickToPauseDisabled={true}
                 height={100}
