@@ -3,7 +3,7 @@ import Message from "../models/MessagesModel.js";
 import {mkdirSync} from "fs"
 export const getMessages = async (request, response, next) => {
   try {
-    const user1 = request.userId
+    const user1 = request.userId // lấy từ cookie
     const user2 = request.body.id;
     if (!user1 || !user2) {
       return response.status(400).send("Both user ID's are required");

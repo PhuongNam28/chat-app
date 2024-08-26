@@ -44,15 +44,12 @@ const setUpSocket = (server) => {
     const { channelId, sender, content, messageType, fileUrl } = message;
 
     const createdMessage = await Message.create({
-      sender,
-      recipient: null,
-      content,
-      messageType,
-      timeStamp: new Date(),
+      sender, recipient: null,
+      content,messageType,timeStamp: new Date(),
       fileUrl,
     });
 
-    const MessageData = await Message.findById(createdMessage._id)
+    const messageData = await Message.findById(createdMessage._id)
       .populate("sender", "id email firstName lastName image color")
       .exec();
 
@@ -62,7 +59,7 @@ const setUpSocket = (server) => {
 
       const channel = await Channel.findById(channelId).populate("members")
 
-      const finalData = {...message._doc,channelId:channel._id}
+      const finalData = {...messageData._doc,channelId:channel._id}
 
       if(channel && channel.members)
       {
@@ -80,7 +77,7 @@ const setUpSocket = (server) => {
         }
       }
   };
-
+ 
   io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;
     if (userId) {
