@@ -24,22 +24,24 @@ export const SocketProvider = ({ children }) => {
         console.log("Connected to socket server");
       });
       const handleReceiveMessage = (message)=>{
-        const {selectedChatType,selectedChatData,addMessage} = userAppStore.getState()
+        const {selectedChatType,selectedChatData,addMessage,addContactsInDMContacts} = userAppStore.getState()
         if (
           selectedChatType!== undefined &&
           (selectedChatData._id === message.sender._id || selectedChatData._id === message.recipient._id)
         ) {
             addMessage(message)
         }
+        addContactsInDMContacts(message)
       }
 
       const handleReceiveChannelMessage = (message)=>{
-        const {selectedChatData,selectedChatType, addMessage} = userAppStore.getState()
+        const {selectedChatData,selectedChatType, addMessage,addChannelInChannelList} = userAppStore.getState()
 
         if(selectedChatType!==undefined && selectedChatData._id === message.channelId)
         {
           addMessage(message)
         }
+        addChannelInChannelList(message)
         
       }
 
